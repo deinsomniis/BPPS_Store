@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: left; }
+    img { max-width: 100px; }
+  </style>
+  <!-- Load Tabletop.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js"></script>
+</head>
+<body>
+  <h1>Spare Parts Inventory</h1>
+  <table id="inventory">
+    <thead>
+      <tr>
+        <th>Picture</th>
+        <th>Description</th>
+        <th>Part Number</th>
+        <th>Shelf Location</th>
+        <th>Quantity</th>
+        <th>Last Update</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // URL of published CSV from your Google Sheet
+    const publicCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrr6H_tRugvd3qjFoW6T93Y3kQFQ0WnQhJXcYVh5eLtkplV1y2eDxscC0zH4XAU1_ps35bXxcBo6Qf/pubhtml';
+
+    // Initialize Tabletop to fetch the CSV
+    window.addEventListener('DOMContentLoaded', () => {
+      Tabletop.init({
+        key: publicCsvUrl,
+        simpleSheet: true,
+        callback: showData
+      });
+    });
+
+    // Build the table rows
+    function showData(data) {
+      const tbody = document.querySelector('#inventory tbody');
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${row['Picture URL']}" alt="Part Image"></td>
+          <td>${row['Description']}</td>
+          <td>${row['Part Number']}</td>
+          <td>${row['Shelf Location']}</td>
+          <td>${row['Quantity']}</td>
+          <td>${row['Last Update']}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
